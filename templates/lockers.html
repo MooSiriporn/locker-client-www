@@ -1,0 +1,19 @@
+﻿ <ion-view title="ระบบจองล็อกเกอร์" hide-back-button="true">
+    <ion-nav-buttons side="left">
+      <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+	<ion-header-bar class="bar bar-subheader">
+		กดที่หมายเลขล็อกเกอร์เพื่อจอง
+	</ion-header-bar>
+	<ion-content class="has-header">
+		<div class="row">
+			<div id="locker-list" class="col">
+				<div ng-repeat="locker in lockers | orderBy:logical_id" class="locker" ng-class="{reserved: locker.state>0}">
+					<a ng-if="locker.state>0">{{locker.logical_id}}</a>
+					<a ng-if="0==locker.state" ng-href="#/app/lockers/{{locker.logical_id}}/reserve" class="button button-balanced">{{locker.logical_id}}</a>
+				</div>
+			</div>
+		</div>
+	 </ion-content>
+  </ion-view>

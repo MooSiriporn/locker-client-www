@@ -1,0 +1,29 @@
+﻿<ion-view title="เข้าใช้งานล็อกเกอร์" hide-nav-bar="true">
+	<div class="bar bar-header bar-dark">
+		<h1 class="title">ระบบจองล็อกเกอร์</h1>
+	</div>
+	<ion-content class="has-header">
+
+		<div class="list list-inset">
+			<div style="margin:2em auto; text-align:center">
+				<img style="width:100%" src="img/utk_logo.png">
+			</div>
+			<div class="item item-divider" style="text-align:center">
+    			เข้าสู่ระบบจองล็อกเกอร์
+			</div>
+			<label class="item item-input">
+				<span class="input-label">ชื่อผู้ใช้</span>
+				<input type="text" ng-model="user.username">
+			</label>
+			<label class="item item-input">
+				<span class="input-label">รหัสผ่าน</span>
+				<input type="password" ng-model="user.password">
+			</label>
+		</div>
+		<div class="padding">
+			<button class="button button-block button-balanced" ng-click="signin(user)">
+				เข้าสู่ระบบ
+			</button>
+		</div>
+	</ion-content>
+</ion-view>
