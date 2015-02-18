@@ -1,9 +1,5 @@
 angular.module('lockerClient.services', ['ngResource'])
 
-    .factory('Lockers', function($resource) {
-        return $resource('http://192.168.100.19:8080/lockers');
-    })
-
     .factory('AuthInterceptor', function($rootScope, $q, $window, $location) {
     	return {
     		request: function(config) {
@@ -23,5 +19,34 @@ angular.module('lockerClient.services', ['ngResource'])
     			}
     		}	
     	};
-    });
+    })
+
+    .factory('LockerService', function($q, $resource, $http) {
+    	var host = 'http://192.168.100.19:8080';
+
+    	return {
+    		login: function(user) {
+    			return $http.post(host + '/login', user);
+    		},
+    		getLockers: function() {
+    			return $http.get(host + '/lockers');
+    		},
+    		reserve: function(locker_logical_id) {
+				// TODO: should be more secure in validating input
+				return $http.post(host  + '/lockers/' + locker_logical_id + '/reserve');
+    		},
+    		open: function(locker_logical_id) {
+    			return $http.post(host  + '/lockers/' + locker_logical_id + '/open');
+    		},
+    		close: function(locker_logical_id) {
+    			return $http.post(host  + '/lockers/' + locker_logical_id + '/close');
+    		},
+    		release: function(locker_logical_id) {
+    			return $http.post(host  + '/lockers/' + locker_logical_id + '/release');
+    		}
+    	}
+
+    })
+
+    ;
 
