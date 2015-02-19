@@ -6,7 +6,7 @@ angular.module('lockerClient.services', ['ngResource'])
 				case 0:
 					return 'ว่าง';
 				case 1:
-					return 'จอง';
+					return 'จองล็อกเกอร์';
 				case 2:
 					return 'เปิดล็อกเกอร์';
 				case 3:
