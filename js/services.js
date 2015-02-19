@@ -1,5 +1,22 @@
 angular.module('lockerClient.services', ['ngResource'])
 
+	.filter('status', function() {
+		return function(input) {
+			switch (input) {
+				case 0:
+					return 'ว่าง';
+				case 1:
+					return 'จอง';
+				case 2:
+					return 'เปิดล็อกเกอร์';
+				case 3:
+					return 'เลิกใช้ล็อกเกอร์';
+				default:
+					return 'สถานะไม่ถูกต้อง';
+			}
+		}
+	})
+
     .factory('AuthInterceptor', function($rootScope, $q, $window, $location) {
     	return {
     		request: function(config) {
@@ -30,6 +47,9 @@ angular.module('lockerClient.services', ['ngResource'])
     		},
     		getLockers: function() {
     			return $http.get(host + '/lockers');
+    		},
+    		getHistory: function() {
+    			return $http.get(host + '/history');
     		},
     		reserve: function(locker_logical_id) {
 				// TODO: should be more secure in validating input

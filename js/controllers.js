@@ -1,4 +1,4 @@
-angular.module('lockerClient.controllers', ['ionic'])
+angular.module('lockerClient.controllers', ['ionic', 'angularMoment', 'angular.filter'])
 
 .controller('AppCtrl', function($scope, $window, $state) {
 	$scope.signout = function() {
@@ -36,6 +36,22 @@ angular.module('lockerClient.controllers', ['ionic'])
 			});
 
 	}
+})
+
+.constant('angularMomentConfig', { timezone: 'Asia/Bangkok' })
+
+.controller('HistoryCtrl', function($scope, $state, $log, $ionicScrollDelegate, amMoment, LockerService) {
+	amMoment.changeLocale('th');
+
+	LockerService.getHistory().then(
+		function(resp) {
+			$scope.histories = resp.data;
+			$ionicScrollDelegate.scrollBottom();
+		},
+		function(error) {
+			$log.error('ไม่สามรถรับข้อมูลประวัติการใช้งานได้', error);
+			$ionicPopup.alert({ template: error.message, okType: 'button-balanced' });
+		});
 })
 
 .controller('ReservationCtrl', function($scope, $state, $stateParams, $log, $ionicPopup, LockerService) {

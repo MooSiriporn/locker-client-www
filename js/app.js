@@ -31,7 +31,7 @@ angular.module('lockerClient', ['ionic', 'lockerClient.controllers', 'lockerClie
 		views: {
 			'menuContent' :{
 				templateUrl: "templates/history.html",
-				controller: 'LockersCtrl'
+				controller: 'HistoryCtrl'
 			}
 		}
 	})
