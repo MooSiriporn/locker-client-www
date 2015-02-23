@@ -1,8 +1,39 @@
 angular.module('lockerClient.controllers', ['ionic', 'angularMoment', 'angular.filter'])
+.constant('angularMomentConfig', { timezone: 'Asia/Bangkok' })
+
+.run(function($ionicPlatform, $ionicPopup) {
+    $ionicPlatform.ready(function() {
+    	$ionicPopup.alert({ template: navigator.connection.type, okType: 'button-balanced' });
+        if(window.Connection) {
+            if(navigator.connection.type == Connection.NONE) {
+                $ionicPopup.confirm({
+                    title: "Internet Disconnected",
+                    content: "The internet is disconnected on your device."
+                })
+                .then(function(result) {
+                    if(!result) {
+                        ionic.Platform.exitApp();
+                    }
+                });
+            }
+        }
+	})
+})
+
+.run(function($ionicPlatform) {
+	$ionicPlatform.ready(function() {
+		setTimeout(function() {
+			navigator.splashscreen.hide();
+		}, 1000);
+	})
+})
 
 .controller('AppCtrl', function($scope, $window, $state) {
+	$scope.username = $window.localStorage.username;
+
 	$scope.signout = function() {
 		delete $window.localStorage.token;
+		delete $window.localStorage.username;
 		$state.go('login');
 	}
 })
@@ -28,6 +59,7 @@ angular.module('lockerClient.controllers', ['ionic', 'angularMoment', 'angular.f
 		LockerService.login(user)
 			.success(function(data) {
 				$window.localStorage.token = data.token;
+				$window.localStorage.username = user.username;
 				$state.go('app.lockers');
 			})
 			.error(function(error) {
@@ -37,8 +69,6 @@ angular.module('lockerClient.controllers', ['ionic', 'angularMoment', 'angular.f
 
 	}
 })
-
-.constant('angularMomentConfig', { timezone: 'Asia/Bangkok' })
 
 .controller('HistoryCtrl', function($scope, $state, $log, $ionicScrollDelegate, amMoment, LockerService) {
 	amMoment.changeLocale('th');
@@ -71,7 +101,18 @@ angular.module('lockerClient.controllers', ['ionic', 'angularMoment', 'angular.f
 
 
 .controller('LockersCtrl', function($scope, $window, $state, $ionicPopup, $log, LockerService) {
-	$scope.lockers = LockerService.getLockers();
+
+	LockerService.getIsUserHasReserved().then(
+		function(resp) {
+			if (resp.data.is_reserved != 'false') {
+				$state.go('command', {locker_id: resp.data.is_reserved});
+			}
+		},
+		function(error) {
+			// TODO: should kick user out and check network connectivity
+			$log.error('ไ่สามารถตรวจสอบสถานะการจองของผู้ใช้ได้', error);
+			$ionicPopup.alert({ template: 'ไ่สามารถตรวจสอบสถานะการจองของผู้ใช้ได้', okType: 'button-balanced' });
+		});
 
 	// TODO: Show spinner while loading
 	LockerService.getLockers().then(
@@ -89,6 +130,7 @@ angular.module('lockerClient.controllers', ['ionic', 'angularMoment', 'angular.f
 })
 
 .controller('CommandCtrl', function($scope, $http, $state, $stateParams, $ionicPopup, $log, LockerService) {
+
 	$scope.showReleaseConfirm = function() {
 		var confirmPopup = $ionicPopup.confirm({
 			title: 'เลิกใช้ล็อกเกอร์',
