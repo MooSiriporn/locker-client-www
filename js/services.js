@@ -13,6 +13,7 @@ angular.module('lockerClient.services', ['ngResource', 'ionic'])
 			return 'เลิกใช้ล็อกเกอร์';
 			default:
 			return 'สถานะไม่ถูกต้อง';
+
 		}
 	}
 })
