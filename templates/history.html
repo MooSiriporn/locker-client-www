@@ -3,15 +3,22 @@
       <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
 	<ion-content class="has-header">
-	    <ion-list ng-repeat="(key, value) in histories | groupBy: 'reservation_id'">
+	    <ion-list ng-repeat="(key, value) in histories | groupBy: 'reservation_id'" ng-if="histories.length > 1">
 			<div class="item item-divider">
 				ล็อกเกอร์หมายเลข {{value[0].logical_id}}
 			</div>
 
-			<a class="item" ng-repeat="history in value">
+			<a class="item item-icon-right" ng-repeat="history in value">
+				<i class="icon ion-unlocked" ng-if="history.state == 2"></i>
 				{{history.created | amCalendar}} <br>
 				{{history.state | status}}
 			</a>
 	    </ion-list>
+	    <div class="card" ng-if="histories.length == 0">
+			<div class="item item-text-wrap" style="text-align:center">
+				ยังไม่มีประวัติการใช้งาน
+			</div>
+		</div>
+</div>
 	</ion-content>
 </ion-view>
